@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceTrackerWeb", "FinanceTrackerWeb\FinanceTrackerWeb.csproj", "{A4DCA75B-827F-493A-86B1-A32D0E86B1B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceTracker.Domain", "FinanceTracker.Domain\FinanceTracker.Domain.csproj", "{26423277-1937-4098-B21C-7E9016752D72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A4DCA75B-827F-493A-86B1-A32D0E86B1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4DCA75B-827F-493A-86B1-A32D0E86B1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4DCA75B-827F-493A-86B1-A32D0E86B1B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26423277-1937-4098-B21C-7E9016752D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26423277-1937-4098-B21C-7E9016752D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26423277-1937-4098-B21C-7E9016752D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26423277-1937-4098-B21C-7E9016752D72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

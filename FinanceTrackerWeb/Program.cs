@@ -1,34 +1,43 @@
+using FinanceTracker.Infrastructure.Configuration;
+using Microsoft.EntityFrameworkCore;
+
 namespace FinanceTrackerWeb
 {
-    public class Program
+  public class Program
+  {
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+      var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddRazorPages();
+      // Add services to the container.
+      builder.Services.AddRazorPages();
 
-            var app = builder.Build();
+      builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(
+          builder.Configuration.GetConnectionString("ConnectionString")
+        )
+      );
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+      var app = builder.Build();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+      // Configure the HTTP request pipeline.
+      if (!app.Environment.IsDevelopment())
+      {
+        app.UseExceptionHandler("/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+      }
 
-            app.UseRouting();
+      app.UseHttpsRedirection();
+      app.UseStaticFiles();
 
-            app.UseAuthorization();
+      app.UseRouting();
 
-            app.MapRazorPages();
+      app.UseAuthorization();
 
-            app.Run();
-        }
+      app.MapRazorPages();
+
+      app.Run();
     }
+  }
 }

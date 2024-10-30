@@ -1,7 +1,7 @@
 using FinanceTracker.Domain.Entities;
 using FinanceTracker.Domain.Enums;
 
-namespace FinanceTracker.Domain.Services;
+namespace FinanceTracker.Domain.Abstractions;
 
 /// <summary>
 /// Основные операции с транзакциями.

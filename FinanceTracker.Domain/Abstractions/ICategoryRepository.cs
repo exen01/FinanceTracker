@@ -1,4 +1,4 @@
-namespace FinanceTracker.Infrastructure.Category;
+namespace FinanceTracker.Domain.Abstractions;
 
 /// <summary>
 /// Основные операции с категориями.

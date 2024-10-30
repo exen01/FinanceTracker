@@ -1,6 +1,6 @@
 using FinanceTracker.Domain.Enums;
 
-namespace FinanceTracker.Infrastructure.Transaction;
+namespace FinanceTracker.Domain.Abstractions;
 
 /// <summary>
 /// Основные операции с транзакциями.

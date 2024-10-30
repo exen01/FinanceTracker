@@ -1,0 +1,74 @@
+@page
+@using System.Globalization
+@using FinanceTracker.Domain.Enums
+@model FinanceTrackerWeb.Pages.TransactionsIndex
+
+@{
+    ViewData["Title"] = "Управление транзакциями";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-page="TransactionsIndex">
+    <div class="mb-3">
+        <label asp-for="Transaction.Amount" class="form-label"></label>
+        <input asp-for="Transaction.Amount" class="form-control"/>
+        <span asp-validation-for="Transaction.Amount"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Transaction.CategoryId" class="form-label"></label>
+        <select asp-for="Transaction.CategoryId" asp-items="Model.Categories" class="form-select"></select>
+        <span asp-validation-for="Transaction.CategoryId"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Transaction.Description" class="form-label"></label>
+        <textarea asp-for="Transaction.Description" class="form-control"></textarea>
+        <span asp-validation-for="Transaction.Description"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Transaction.Date" class="form-label"></label>
+        <input asp-for="Transaction.Date" class="form-control"/>
+        <span asp-validation-for="Transaction.Date"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Transaction.TransactionType" class="form-label"></label>
+        <select asp-for="Transaction.TransactionType" asp-items="Html.GetEnumSelectList<TransactionType>()" class="form-select"></select>
+        <span asp-validation-for="Transaction.Amount"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Добавить транзакцию</button>
+</form>
+
+<h3>Список транзакций</h3>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Дата</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Категория</th>
+        <th scope="col">Описание</th>
+        <th scope="col">Тип</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var transaction in Model.Transactions)
+    {
+        <tr>
+            <td>@transaction.Date.ToString(CultureInfo.InvariantCulture)</td>
+            <td>@transaction.Amount</td>
+            <td>@transaction.Category.CategoryName</td>
+            <td>@transaction.Description</td>
+            <td>@transaction.TransactionType</td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+    <tr>
+        <th scope="col">Баланс:</th>
+        <td colspan="4" class="align-content-end">@Model.Balance</td>
+    </tr>
+    </tfoot>
+</table>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}

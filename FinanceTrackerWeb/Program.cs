@@ -1,4 +1,8 @@
+using FinanceTracker.Domain.Abstractions;
+using FinanceTracker.Domain.Services;
+using FinanceTracker.Infrastructure.Category;
 using FinanceTracker.Infrastructure.Configuration;
+using FinanceTracker.Infrastructure.Transaction;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceTrackerWeb
@@ -8,6 +12,11 @@ namespace FinanceTrackerWeb
     public static void Main(string[] args)
     {
       var builder = WebApplication.CreateBuilder(args);
+
+      builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+      builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+      builder.Services.AddScoped<ITransactionService, TransactionService>();
+      builder.Services.AddScoped<ICategoryService, CategoryService>();
 
       // Add services to the container.
       builder.Services.AddRazorPages();

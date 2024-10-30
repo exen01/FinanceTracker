@@ -70,4 +70,10 @@ public interface ITransactionService
   /// <param name="transactionType">Тип</param>
   /// <returns>Список транзакций</returns>
   List<Transaction> GetTransactionsByType(TransactionType transactionType);
+  
+  /// <summary>
+  /// Получает список всех транзакций.
+  /// </summary>
+  /// <returns></returns>
+  List<Transaction> GetAllTransactions();
 }

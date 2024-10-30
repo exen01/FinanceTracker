@@ -68,6 +68,11 @@ public class TransactionService : ITransactionService
     return _transactionRepository.GetTransactionsByType(transactionType);
   }
 
+  public List<Transaction> GetAllTransactions()
+  {
+    return _transactionRepository.GetAllTransactions();
+  }
+
   private void ValidateTransactionAmount(Transaction transaction)
   {
     if (transaction.Amount < 0)
@@ -82,5 +87,14 @@ public class TransactionService : ITransactionService
     {
       throw new ArgumentException("Недопустимая или несоответствующая категория для транзакции.");
     }
+  }
+
+  /// <summary>
+  /// Конструктор.
+  /// </summary>
+  /// <param name="transactionRepository">Репозиторий транзакций</param>
+  public TransactionService(ITransactionRepository transactionRepository)
+  {
+    _transactionRepository = transactionRepository;
   }
 }

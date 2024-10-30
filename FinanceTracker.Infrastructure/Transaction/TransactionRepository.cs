@@ -84,4 +84,19 @@ public class TransactionRepository : ITransactionRepository
   {
     return _transactionsDbSet.Where(t => t.TransactionType == transactionType).ToList();
   }
+
+  public List<Domain.Entities.Transaction> GetAllTransactions()
+  {
+    return _transactionsDbSet.ToList();
+  }
+
+  /// <summary>
+  /// Конструктор.
+  /// </summary>
+  /// <param name="dbContext">Контекст базы данных</param>
+  public TransactionRepository(ApplicationDbContext dbContext)
+  {
+    _dbContext = dbContext;
+    _transactionsDbSet = _dbContext.Set<Domain.Entities.Transaction>();
+  }
 }

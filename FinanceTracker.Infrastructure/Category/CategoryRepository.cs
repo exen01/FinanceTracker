@@ -47,4 +47,14 @@ public class CategoryRepository : ICategoryRepository
   {
     return _categoriesDbSet.Find(categoryId);
   }
+
+  /// <summary>
+  /// Конструктор.
+  /// </summary>
+  /// <param name="dbContext">Контекст базы данных</param>
+  public CategoryRepository(ApplicationDbContext dbContext)
+  {
+    _dbContext = dbContext;
+    _categoriesDbSet = _dbContext.Set<Domain.Entities.Category>();
+  }
 }

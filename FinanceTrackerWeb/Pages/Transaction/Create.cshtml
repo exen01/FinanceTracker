@@ -1,0 +1,41 @@
+@page
+@using FinanceTracker.Domain.Enums
+@model CreateModel
+
+@{
+    ViewData["Title"] = "Создание новой транзакции";
+}
+
+<div>
+    <a asp-page="Index">Список транзакций</a>
+</div>
+<h1>@ViewData["Title"]</h1>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="TransactionDto.Amount" class="form-label"></label>
+                <input asp-for="TransactionDto.Amount" class="form-control" placeholder="0.00"/>
+                <span asp-validation-for="TransactionDto.Amount" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TransactionDto.CategoryId" class="form-label"></label>
+                <select asp-for="TransactionDto.CategoryId" asp-items="Model.Categories" class="form-select"></select>
+                <span asp-validation-for="TransactionDto.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TransactionDto.Description" class="form-label"></label>
+                <textarea asp-for="TransactionDto.Description" class="form-control"></textarea>
+                <span asp-validation-for="TransactionDto.Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TransactionDto.Date" class="form-label"></label>
+                <input asp-for="TransactionDto.Date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"/>
+                <span asp-validation-for="TransactionDto.Date" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success">Создать</button>
+        </form>
+    </div>
+</div>

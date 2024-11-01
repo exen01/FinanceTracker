@@ -87,7 +87,7 @@ public class TransactionRepository : ITransactionRepository
 
   public List<Domain.Entities.Transaction> GetAllTransactions()
   {
-    return _transactionsDbSet.ToList();
+    return _transactionsDbSet.Include(t => t.Category).ToList();
   }
 
   /// <summary>

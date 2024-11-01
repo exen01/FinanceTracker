@@ -1,0 +1,36 @@
+﻿@page
+@using FinanceTracker.Domain.Enums
+@model CreateModel
+
+@{
+    ViewData["Title"] = "Создание новой категории";
+}
+<div>
+    <a asp-page="Index">Список категорий</a>
+</div>
+<h1>@ViewData["Title"]</h1>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="CategoryDto.CategoryName" class="control-label"></label>
+                <input asp-for="CategoryDto.CategoryName" class="form-control"/>
+                <span asp-validation-for="CategoryDto.CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="CategoryDto.TransactionType" class="control-label"></label>
+                <select asp-for="CategoryDto.TransactionType" asp-items="Html.GetEnumSelectList<TransactionType>()" class="form-select"></select>
+                <span asp-validation-for="CategoryDto.TransactionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-success"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

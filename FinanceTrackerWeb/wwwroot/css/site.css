@@ -20,3 +20,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  color: #ddd;
+}
+
+.nav-link:hover {
+  color: #fff;
+  background-color: #495057;
+}

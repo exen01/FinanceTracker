@@ -1,5 +1,4 @@
 using FinanceTracker.Domain.Abstractions;
-using FinanceTracker.Domain.Entities;
 using FinanceTrackerWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,9 +17,9 @@ public class TransactionsIndex : PageModel
     _categoryService = categoryService;
   }
 
-  [BindProperty] public TransactionViewModel Transaction { get; set; }
+  [BindProperty] public TransactionDto Transaction { get; set; }
 
-  public List<Transaction> Transactions { get; set; }
+  public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
   public List<SelectListItem> Categories { get; set; }
   public decimal Balance { get; set; }
 
@@ -44,7 +43,7 @@ public class TransactionsIndex : PageModel
       return Page();
     }
 
-    var newTransaction = new Transaction
+    var newTransaction = new FinanceTracker.Domain.Entities.Transaction
     {
       Id = Guid.NewGuid(),
       Amount = Transaction.Amount,

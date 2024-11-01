@@ -1,30 +1,30 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using FinanceTracker.Domain.Enums;
 
 namespace FinanceTrackerWeb.Models;
 
-public class TransactionViewModel
+public record TransactionDto
 {
   [Required(ErrorMessage = "Введите сумму транзакции.")]
   [Display(Name = "Сумма транзакции")]
-  public decimal Amount { get; set; }
+  public decimal Amount { get; init; }
 
   [Required(ErrorMessage = "Выберите категорию.")]
   [Display(Name = "Категория")]
-  public int CategoryId { get; set; }
+  public int CategoryId { get; init; }
 
   [Required(AllowEmptyStrings = true)]
   [MaxLength(500, ErrorMessage = "Описание не может превышать 500 символов.")]
   [Display(Name = "Описание")]
-  public string Description { get; set; }
+  public string Description { get; init; }
 
   [Required(ErrorMessage = "Выберите дату транзакции.")]
   [DataType(DataType.DateTime)]
   [Display(Name = "Дата")]
-  public DateTime Date { get; set; }
+  [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+  public DateTime Date { get; init; }
 
   [Required(ErrorMessage = "Выберите тип транзакции.")]
   [Display(Name = "Тип транзакции")]
-  public TransactionType TransactionType { get; set; }
+  public TransactionType TransactionType { get; init; }
 }

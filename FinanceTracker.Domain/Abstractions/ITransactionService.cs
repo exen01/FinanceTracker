@@ -43,6 +43,18 @@ public interface ITransactionService
   decimal GetTotalBalance();
 
   /// <summary>
+  /// Получает общую сумму доходов.
+  /// </summary>
+  /// <returns></returns>
+  decimal GetTotalIncome();
+
+  /// <summary>
+  /// Получает общую сумму расходов.
+  /// </summary>
+  /// <returns></returns>
+  decimal GetTotalExpense();
+
+  /// <summary>
   /// Получает список транзакций за период.
   /// </summary>
   /// <param name="startDate">Начало периода</param>

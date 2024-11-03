@@ -48,6 +48,20 @@ public class TransactionService : ITransactionService
     return _transactionRepository.GetTotalBalance();
   }
 
+  public decimal GetTotalIncome()
+  {
+    var incomeTransactions = _transactionRepository.GetTransactionsByType(TransactionType.Income);
+
+    return incomeTransactions.Sum(incomeTransaction => incomeTransaction.Amount);
+  }
+
+  public decimal GetTotalExpense()
+  {
+    var expenseTransactions = _transactionRepository.GetTransactionsByType(TransactionType.Expense);
+
+    return expenseTransactions.Sum(expenseTransaction => expenseTransaction.Amount);
+  }
+
   public List<Transaction> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
     return _transactionRepository.GetTransactionsByDateRange(startDate, endDate).OrderBy(t => t.Date).ToList();

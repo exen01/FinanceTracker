@@ -13,6 +13,36 @@
     <a asp-page="Create" class="btn btn-success">+ Новая транзакция</a>
 </p>
 
+<form method="get" class="row gy-2 gx-3 align-items-center mb-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-auto">
+        <div class="input-group">
+            <label asp-for="CategoryId" class="input-group-text"></label>
+            <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "CategoryName"))" class="form-select">
+                <option value="" selected>Все</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="input-group">
+            <label asp-for="StartDate" class="input-group-text"></label>
+            <input asp-for="StartDate" class="form-control"/>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="input-group">
+            <label asp-for="EndDate" class="input-group-text"></label>
+            <input asp-for="EndDate" class="form-control"/>
+        </div>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Применить</button>
+    </div>
+    <div class="col-auto">
+        <a asp-page="./Index" class="btn btn-outline-secondary">Сбросить фильтры</a>
+    </div>
+</form>
+
 <table class="table table-striped table-hover">
     <thead>
     <tr>

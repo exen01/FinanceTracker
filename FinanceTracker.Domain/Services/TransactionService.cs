@@ -50,27 +50,32 @@ public class TransactionService : ITransactionService
 
   public List<Transaction> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
-    return _transactionRepository.GetTransactionsByDateRange(startDate, endDate);
+    return _transactionRepository.GetTransactionsByDateRange(startDate, endDate).OrderBy(t => t.Date).ToList();
   }
 
   public List<Transaction> GetTransactionsByDate(DateTime date)
   {
-    return _transactionRepository.GetTransactionsByDate(date);
+    return _transactionRepository.GetTransactionsByDate(date).OrderBy(t => t.Date).ToList();
   }
 
   public List<Transaction> GetTransactionsByCategory(Category category)
   {
-    return _transactionRepository.GetTransactionsByCategory(category);
+    return _transactionRepository.GetTransactionsByCategory(category).OrderBy(t => t.Date).ToList();
+  }
+
+  public List<Transaction> GetTransactionsByCategoryId(int categoryId)
+  {
+    return _transactionRepository.GetTransactionsByCategoryId(categoryId).OrderBy(t => t.Date).ToList();
   }
 
   public List<Transaction> GetTransactionsByType(TransactionType transactionType)
   {
-    return _transactionRepository.GetTransactionsByType(transactionType);
+    return _transactionRepository.GetTransactionsByType(transactionType).OrderBy(t => t.Date).ToList();
   }
 
   public List<Transaction> GetAllTransactions()
   {
-    return _transactionRepository.GetAllTransactions();
+    return _transactionRepository.GetAllTransactions().OrderBy(t => t.Date).ToList();
   }
 
   private void ValidateTransactionAmount(Transaction transaction)

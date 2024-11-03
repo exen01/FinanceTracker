@@ -65,12 +65,19 @@ public interface ITransactionRepository
   List<Transaction> GetTransactionsByCategory(Category category);
 
   /// <summary>
+  /// Получает список транзакций по идентификатору категории.
+  /// </summary>
+  /// <param name="categoryId">Идентификатор категории</param>
+  /// <returns>Список транзакций</returns>
+  List<Transaction> GetTransactionsByCategoryId(int categoryId);
+
+  /// <summary>
   /// Получает список транзакций по типу <see cref="TransactionType"/>.
   /// </summary>
   /// <param name="transactionType">Тип</param>
   /// <returns>Список транзакций</returns>
   List<Transaction> GetTransactionsByType(TransactionType transactionType);
-  
+
   /// <summary>
   /// Получает список всех транзакций.
   /// </summary>

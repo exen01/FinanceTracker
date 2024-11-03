@@ -67,17 +67,22 @@ public class TransactionRepository : ITransactionRepository
 
   public List<Domain.Entities.Transaction> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
-    return _transactionsDbSet.Where(t => t.Date >= startDate && t.Date <= endDate).ToList();
+    return _transactionsDbSet.Where(t => t.Date.Date >= startDate.Date && t.Date.Date <= endDate.Date).ToList();
   }
 
   public List<Domain.Entities.Transaction> GetTransactionsByDate(DateTime date)
   {
-    return _transactionsDbSet.Where(t => t.Date == date).ToList();
+    return _transactionsDbSet.Where(t => t.Date.Date == date.Date).ToList();
   }
 
   public List<Domain.Entities.Transaction> GetTransactionsByCategory(Domain.Entities.Category category)
   {
     return _transactionsDbSet.Where(t => t.Category == category).ToList();
+  }
+
+  public List<Domain.Entities.Transaction> GetTransactionsByCategoryId(int categoryId)
+  {
+    return _transactionsDbSet.Where(t => t.Category.Id == categoryId).ToList();
   }
 
   public List<Domain.Entities.Transaction> GetTransactionsByType(TransactionType transactionType)

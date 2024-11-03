@@ -1,3 +1,5 @@
+using FinanceTracker.Domain.Enums;
+
 namespace FinanceTracker.Domain.Abstractions;
 
 /// <summary>
@@ -10,7 +12,7 @@ public interface ICategoryRepository
   /// </summary>
   /// <param name="category">Данные новой категории</param>
   /// <returns>Новая категория</returns>
-  Domain.Entities.Category AddCategory(Domain.Entities.Category category);
+  Entities.Category AddCategory(Entities.Category category);
 
   /// <summary>
   /// Удаляет категорию.
@@ -24,18 +26,25 @@ public interface ICategoryRepository
   /// </summary>
   /// <param name="category">Категория с обновленными данными</param>
   /// <returns>Обновленная категория</returns>
-  Domain.Entities.Category UpdateCategory(Domain.Entities.Category category);
+  Entities.Category UpdateCategory(Entities.Category category);
 
   /// <summary>
   /// Получает список всех категорий.
   /// </summary>
   /// <returns>Список категорий</returns>
-  List<Domain.Entities.Category> GetAllCategories();
+  List<Entities.Category> GetAllCategories();
 
   /// <summary>
   /// Получает категорию по идентификатору.
   /// </summary>
   /// <param name="categoryId">Идентификатор категории</param>
   /// <returns>Найденная категория или null</returns>
-  Domain.Entities.Category? GetCategoryById(int categoryId);
+  Entities.Category? GetCategoryById(int categoryId);
+
+  /// <summary>
+  /// Получает список категорий по типу <see cref="TransactionType"/>
+  /// </summary>
+  /// <param name="type"></param>
+  /// <returns></returns>
+  List<Entities.Category> GetCategoriesByType(TransactionType type);
 }

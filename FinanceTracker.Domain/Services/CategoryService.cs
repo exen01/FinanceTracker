@@ -1,5 +1,6 @@
 using FinanceTracker.Domain.Abstractions;
 using FinanceTracker.Domain.Entities;
+using FinanceTracker.Domain.Enums;
 
 namespace FinanceTracker.Domain.Services;
 
@@ -30,6 +31,11 @@ public class CategoryService : ICategoryService
   public List<Category> GetAllCategories()
   {
     return _categoryRepository.GetAllCategories();
+  }
+
+  public List<Category> GetCategoriesByType(TransactionType type)
+  {
+    return _categoryRepository.GetCategoriesByType(type);
   }
 
   /// <summary>

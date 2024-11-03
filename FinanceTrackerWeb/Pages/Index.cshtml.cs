@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using FinanceTracker.Domain.Abstractions;
+using FinanceTracker.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,6 +10,7 @@ namespace FinanceTrackerWeb.Pages
   {
     private readonly ILogger<IndexModel> _logger;
     private readonly ITransactionService _transactionService;
+    private readonly ICategoryService _categoryService;
 
     [DataType(DataType.Currency)]
     [Display(Name = "Общий доход")]
@@ -22,9 +24,15 @@ namespace FinanceTrackerWeb.Pages
     [Display(Name = "Баланс")]
     public decimal TotalBalance { get; set; }
 
-    public IndexModel(ITransactionService transactionService, ILogger<IndexModel> logger)
+    public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
+    public List<FinanceTracker.Domain.Entities.Category> Categories { get; set; }
+    public Dictionary<string, decimal> CategoryExpenses { get; set; }
+
+    public IndexModel(ITransactionService transactionService, ICategoryService categoryService,
+      ILogger<IndexModel> logger)
     {
       _transactionService = transactionService;
+      _categoryService = categoryService;
       _logger = logger;
     }
 
@@ -33,6 +41,15 @@ namespace FinanceTrackerWeb.Pages
       TotalIncome = _transactionService.GetTotalIncome();
       TotalExpense = _transactionService.GetTotalExpense();
       TotalBalance = _transactionService.GetTotalBalance();
+
+      Transactions = _transactionService.GetAllTransactions();
+      Categories = _categoryService.GetCategoriesByType(TransactionType.Expense);
+
+      CategoryExpenses = Categories.ToDictionary(
+        category => category.CategoryName,
+        category => Transactions
+          .Where(t => t.Category.Id == category.Id)
+          .Sum(t => t.Amount));
     }
   }
 }

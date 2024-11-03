@@ -1,4 +1,5 @@
 ﻿using FinanceTracker.Domain.Abstractions;
+using FinanceTracker.Domain.Enums;
 using FinanceTracker.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,11 @@ public class CategoryRepository : ICategoryRepository
   public Domain.Entities.Category? GetCategoryById(int categoryId)
   {
     return _categoriesDbSet.Find(categoryId);
+  }
+
+  public List<Domain.Entities.Category> GetCategoriesByType(TransactionType type)
+  {
+    return _categoriesDbSet.Where(c => c.TransactionType == type).ToList();
   }
 
   /// <summary>

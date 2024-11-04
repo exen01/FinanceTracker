@@ -4,8 +4,8 @@
     ViewData["Title"] = "Домашняя страница";
 }
 
-<div class="row row-cols-3 g-4">
-    <div class="col">
+<div class="row">
+    <div class="col-4">
         <div class="card border-dark bg-light mb-3">
             <div class="row g-0">
                 <div class="col-md-4 d-flex align-items-center justify-content-center">
@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col-4">
         <div class="card border-dark bg-light mb-3">
             <div class="row g-0">
                 <div class="col-md-4 d-flex align-items-center justify-content-center">
@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col-4">
         <div class="card border-dark bg-light mb-3">
             <div class="row g-0">
                 <div class="col-md-4 d-flex align-items-center justify-content-center">
@@ -56,9 +56,16 @@
             </div>
         </div>
     </div>
-    <div class="col">
-        <div class="card border-dark bg-light mb-3">
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="card h-100 border-dark bg-light mb-3">
             <canvas id="expenseChart"></canvas>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card h-100 border-dark bg-light mb-3">
+            <canvas id="trendChart"></canvas>
         </div>
     </div>
 </div>
@@ -108,12 +115,68 @@
                     },
                     datalabels: {
                         formatter: (value, context) => {
-                            return value; // Отображаем значение
+                            return value;
                         },
                     }
                 }
             },
-            plugins: [ChartDataLabels] // Добавляем плагин
+            plugins: [ChartDataLabels]
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById('trendChart').getContext('2d');
+
+        var expenseDates = @Html.Raw(Json.Serialize(Model.ExpensesByDate.Select(e => e.Date.ToString("yyyy-MM-dd")).ToArray()));
+        var expenseAmounts = @Html.Raw(Json.Serialize(Model.ExpensesByDate.Select(e => e.TotalAmount).ToArray()));
+
+        var trendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: expenseDates,
+                datasets: [{
+                    label: 'Тренд расходов',
+                    data: expenseAmounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Тренд расходов за период'
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day' // 'month', 'week'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Дата'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Сумма расходов'
+                        }
+                    }
+                }
+            }
         });
     });
 </script>

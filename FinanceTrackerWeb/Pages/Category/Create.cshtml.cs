@@ -1,6 +1,6 @@
 ﻿using FinanceTracker.Domain.Abstractions;
 using FinanceTracker.Infrastructure.Configuration;
-using FinanceTrackerWeb.Models;
+using FinanceTrackerWeb.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

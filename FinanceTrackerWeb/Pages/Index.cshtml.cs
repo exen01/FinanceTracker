@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FinanceTracker.Domain.Abstractions;
 using FinanceTracker.Domain.Enums;
+using FinanceTrackerWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -27,6 +28,8 @@ namespace FinanceTrackerWeb.Pages
     public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
     public List<FinanceTracker.Domain.Entities.Category> Categories { get; set; }
     public Dictionary<string, decimal> CategoryExpenses { get; set; }
+    public List<ExpenseOverTime> ExpensesByDate { get; set; }
+    public List<ExpenseOverTime> IncomeByDate { get; set; }
 
     public IndexModel(ITransactionService transactionService, ICategoryService categoryService,
       ILogger<IndexModel> logger)
@@ -50,6 +53,28 @@ namespace FinanceTrackerWeb.Pages
         category => Transactions
           .Where(t => t.Category.Id == category.Id)
           .Sum(t => t.Amount));
+
+      ExpensesByDate = Transactions
+        .Where(t => t.TransactionType == TransactionType.Expense)
+        .GroupBy(t => t.Date.Date)
+        .Select(g => new ExpenseOverTime
+        {
+          Date = g.Key,
+          TotalAmount = g.Sum(t => t.Amount)
+        })
+        .OrderBy(e => e.Date)
+        .ToList();
+
+      IncomeByDate = Transactions
+        .Where(t => t.TransactionType == TransactionType.Income)
+        .GroupBy(t => t.Date.Date)
+        .Select(g => new ExpenseOverTime
+        {
+          Date = g.Key,
+          TotalAmount = g.Sum(t => t.Amount)
+        })
+        .OrderBy(e => e.Date)
+        .ToList();
     }
   }
 }

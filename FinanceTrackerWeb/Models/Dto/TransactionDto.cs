@@ -1,8 +1,7 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using FinanceTracker.Domain.Enums;
 
-namespace FinanceTrackerWeb.Models;
+namespace FinanceTrackerWeb.Models.Dto;
 
 public record TransactionDto
 {

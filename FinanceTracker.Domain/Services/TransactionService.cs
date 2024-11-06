@@ -62,6 +62,26 @@ public class TransactionService : ITransactionService
     return expenseTransactions.Sum(expenseTransaction => expenseTransaction.Amount);
   }
 
+  public decimal GetBalanceForTransactions(IList<Transaction> transactions)
+  {
+    var balance = decimal.Zero;
+
+    foreach (var transaction in transactions)
+    {
+      switch (transaction.TransactionType)
+      {
+        case TransactionType.Income:
+          balance += transaction.Amount;
+          break;
+        case TransactionType.Expense:
+          balance -= transaction.Amount;
+          break;
+      }
+    }
+
+    return balance;
+  }
+
   public List<Transaction> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
     return _transactionRepository.GetTransactionsByDateRange(startDate, endDate).OrderBy(t => t.Date).ToList();

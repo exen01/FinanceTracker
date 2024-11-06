@@ -13,6 +13,7 @@ public interface ITransactionService
   /// </summary>
   /// <param name="transaction">Новая транзакция</param>
   /// <returns>Созданная транзакция</returns>
+  /// <exception cref="InvalidOperationException">Если недостаточный баланс для транзакции</exception>
   Transaction AddTransaction(Transaction transaction);
 
   /// <summary>
@@ -53,6 +54,13 @@ public interface ITransactionService
   /// </summary>
   /// <returns></returns>
   decimal GetTotalExpense();
+
+  /// <summary>
+  /// Получает баланс по списку транзакций.
+  /// </summary>
+  /// <param name="transactions">Список транзакций</param>
+  /// <returns>Баланс транзакций</returns>
+  decimal GetBalanceForTransactions(IList<Transaction> transactions);
 
   /// <summary>
   /// Получает список транзакций за период.

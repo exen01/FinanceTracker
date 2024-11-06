@@ -13,6 +13,7 @@ public class CreateModel : PageModel
 
   [BindProperty] public TransactionDto TransactionDto { get; set; } = default!;
   public List<SelectListItem> Categories { get; set; }
+  public string? ErrorMessage { get; set; }
 
   public CreateModel(ITransactionService transactionService, ICategoryService categoryService)
   {
@@ -52,7 +53,15 @@ public class CreateModel : PageModel
       TransactionType = transactionCategory.TransactionType
     };
 
-    _transactionService.AddTransaction(newTransaction);
+    try
+    {
+      _transactionService.AddTransaction(newTransaction);
+    }
+    catch (InvalidOperationException e)
+    {
+      ErrorMessage = e.Message;
+      return Page();
+    }
 
     return RedirectToPage("./Index");
   }

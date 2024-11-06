@@ -75,7 +75,7 @@ public class IndexModel : PageModel
       Transactions = _transactionService.GetAllTransactions();
     }
 
-    Balance = _transactionService.GetTotalBalance();
+    Balance = _transactionService.GetBalanceForTransactions(Transactions);
 
     return Page();
   }

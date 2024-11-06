@@ -21,9 +21,10 @@ public class CreateModel : PageModel
     _categoryService = categoryService;
   }
 
-  public void OnGet()
+  public async Task OnGetAsync()
   {
-    Categories = _categoryService.GetAllCategories()
+    var categoriesList = await _categoryService.GetAllCategories();
+    Categories = categoriesList
       .Select(c => new SelectListItem
       {
         Value = c.Id.ToString(),
@@ -31,15 +32,15 @@ public class CreateModel : PageModel
       }).ToList();
   }
 
-  public IActionResult OnPost()
+  public async Task<IActionResult> OnPost()
   {
     if (!ModelState.IsValid)
     {
-      OnGet();
+      await OnGetAsync();
       return Page();
     }
 
-    var transactionCategory = _categoryService.GetCategoryById(TransactionDto.CategoryId);
+    var transactionCategory = await _categoryService.GetCategoryById(TransactionDto.CategoryId);
 
     if (transactionCategory == null) return Page();
 

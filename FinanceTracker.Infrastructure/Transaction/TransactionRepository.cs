@@ -10,25 +10,25 @@ public class TransactionRepository : ITransactionRepository
   private readonly ApplicationDbContext _dbContext;
   private readonly DbSet<Domain.Entities.Transaction> _transactionsDbSet;
 
-  public Domain.Entities.Transaction AddTransaction(Domain.Entities.Transaction transaction)
+  public async Task<Domain.Entities.Transaction> AddTransaction(Domain.Entities.Transaction transaction)
   {
-    var savedTransaction = _transactionsDbSet.Add(transaction);
-    _dbContext.SaveChanges();
+    var savedTransaction = await _transactionsDbSet.AddAsync(transaction);
+    await _dbContext.SaveChangesAsync();
 
     return savedTransaction.Entity;
   }
 
-  public Domain.Entities.Transaction UpdateTransaction(Domain.Entities.Transaction transaction)
+  public async Task<Domain.Entities.Transaction> UpdateTransaction(Domain.Entities.Transaction transaction)
   {
     var updatedTransaction = _transactionsDbSet.Update(transaction);
-    _dbContext.SaveChanges();
+    await _dbContext.SaveChangesAsync();
 
     return updatedTransaction.Entity;
   }
 
-  public bool DeleteTransaction(Guid transactionId)
+  public async Task<bool> DeleteTransaction(Guid transactionId)
   {
-    var transaction = _transactionsDbSet.Find(transactionId);
+    var transaction = await _transactionsDbSet.FindAsync(transactionId);
 
     if (transaction == null)
     {
@@ -36,20 +36,20 @@ public class TransactionRepository : ITransactionRepository
     }
 
     _transactionsDbSet.Remove(transaction);
-    _dbContext.SaveChanges();
+    await _dbContext.SaveChangesAsync();
 
     return true;
   }
 
-  public Domain.Entities.Transaction? GetTransactionById(Guid transactionId)
+  public async Task<Domain.Entities.Transaction?> GetTransactionById(Guid transactionId)
   {
-    return _transactionsDbSet.Find(transactionId);
+    return await _transactionsDbSet.FindAsync(transactionId);
   }
 
-  public decimal GetTotalBalance()
+  public async Task<decimal> GetTotalBalance()
   {
     decimal totalBalance = 0;
-    foreach (var transaction in _transactionsDbSet.ToList())
+    foreach (var transaction in await _transactionsDbSet.ToListAsync())
     {
       switch (transaction.TransactionType)
       {
@@ -65,34 +65,46 @@ public class TransactionRepository : ITransactionRepository
     return totalBalance;
   }
 
-  public List<Domain.Entities.Transaction> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
+  public async Task<List<Domain.Entities.Transaction>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
-    return _transactionsDbSet.Where(t => t.Date.Date >= startDate.Date && t.Date.Date <= endDate.Date).ToList();
+    return await _transactionsDbSet
+      .Where(t => t.Date.Date >= startDate.Date && t.Date.Date <= endDate.Date)
+      .ToListAsync();
   }
 
-  public List<Domain.Entities.Transaction> GetTransactionsByDate(DateTime date)
+  public async Task<List<Domain.Entities.Transaction>> GetTransactionsByDate(DateTime date)
   {
-    return _transactionsDbSet.Where(t => t.Date.Date == date.Date).ToList();
+    return await _transactionsDbSet
+      .Where(t => t.Date.Date == date.Date)
+      .ToListAsync();
   }
 
-  public List<Domain.Entities.Transaction> GetTransactionsByCategory(Domain.Entities.Category category)
+  public async Task<List<Domain.Entities.Transaction>> GetTransactionsByCategory(Domain.Entities.Category category)
   {
-    return _transactionsDbSet.Where(t => t.Category == category).ToList();
+    return await _transactionsDbSet
+      .Where(t => t.Category == category)
+      .ToListAsync();
   }
 
-  public List<Domain.Entities.Transaction> GetTransactionsByCategoryId(int categoryId)
+  public async Task<List<Domain.Entities.Transaction>> GetTransactionsByCategoryId(int categoryId)
   {
-    return _transactionsDbSet.Where(t => t.Category.Id == categoryId).ToList();
+    return await _transactionsDbSet
+      .Where(t => t.Category.Id == categoryId)
+      .ToListAsync();
   }
 
-  public List<Domain.Entities.Transaction> GetTransactionsByType(TransactionType transactionType)
+  public async Task<List<Domain.Entities.Transaction>> GetTransactionsByType(TransactionType transactionType)
   {
-    return _transactionsDbSet.Where(t => t.TransactionType == transactionType).ToList();
+    return await _transactionsDbSet
+      .Where(t => t.TransactionType == transactionType)
+      .ToListAsync();
   }
 
-  public List<Domain.Entities.Transaction> GetAllTransactions()
+  public async Task<List<Domain.Entities.Transaction>> GetAllTransactions()
   {
-    return _transactionsDbSet.Include(t => t.Category).ToList();
+    return await _transactionsDbSet
+      .Include(t => t.Category)
+      .ToListAsync();
   }
 
   /// <summary>

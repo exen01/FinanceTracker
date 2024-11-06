@@ -8,34 +8,34 @@ public class CategoryService : ICategoryService
 {
   private readonly ICategoryRepository _categoryRepository;
 
-  public Category? GetCategoryById(int id)
+  public async Task<Category?> GetCategoryById(int id)
   {
-    return _categoryRepository.GetCategoryById(id);
+    return await _categoryRepository.GetCategoryById(id);
   }
 
-  public Category AddCategory(Category category)
+  public async Task<Category> AddCategory(Category category)
   {
-    return _categoryRepository.AddCategory(category);
+    return await _categoryRepository.AddCategory(category);
   }
 
-  public bool DeleteCategoryById(int id)
+  public async Task<bool> DeleteCategoryById(int id)
   {
-    return _categoryRepository.DeleteCategoryById(id);
+    return await _categoryRepository.DeleteCategoryById(id);
   }
 
-  public Category UpdateCategory(Category category)
+  public async Task<Category> UpdateCategory(Category category)
   {
-    return _categoryRepository.UpdateCategory(category);
+    return await _categoryRepository.UpdateCategory(category);
   }
 
-  public List<Category> GetAllCategories()
+  public async Task<List<Category>> GetAllCategories()
   {
-    return _categoryRepository.GetAllCategories();
+    return await _categoryRepository.GetAllCategories();
   }
 
-  public List<Category> GetCategoriesByType(TransactionType type)
+  public async Task<List<Category>> GetCategoriesByType(TransactionType type)
   {
-    return _categoryRepository.GetCategoriesByType(type);
+    return await _categoryRepository.GetCategoriesByType(type);
   }
 
   /// <summary>

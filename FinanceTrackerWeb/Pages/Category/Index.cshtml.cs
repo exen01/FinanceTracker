@@ -14,9 +14,9 @@ namespace FinanceTrackerWeb.Pages.Category
 
     public IList<FinanceTracker.Domain.Entities.Category> Category { get; set; } = default!;
 
-    public void OnGet()
+    public async Task OnGetAsync()
     {
-      Category = _service.GetAllCategories();
+      Category = await _service.GetAllCategories();
     }
   }
 }

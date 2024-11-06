@@ -8,56 +8,56 @@ public class TransactionService : ITransactionService
 {
   private readonly ITransactionRepository _transactionRepository;
 
-  public Transaction AddTransaction(Transaction transaction)
+  public async Task<Transaction> AddTransaction(Transaction transaction)
   {
     ValidateTransactionAmount(transaction);
     ValidateTransactionCategory(transaction);
 
     if (transaction.TransactionType == TransactionType.Expense)
     {
-      var currentBalance = GetTotalBalance();
+      var currentBalance = await GetTotalBalance();
       if (currentBalance - transaction.Amount < 0)
       {
         throw new InvalidOperationException("Недостаточный баланс для транзакции.");
       }
     }
 
-    return _transactionRepository.AddTransaction(transaction);
+    return await _transactionRepository.AddTransaction(transaction);
   }
 
-  public Transaction UpdateTransaction(Transaction transaction)
+  public async Task<Transaction> UpdateTransaction(Transaction transaction)
   {
     ValidateTransactionAmount(transaction);
     ValidateTransactionCategory(transaction);
 
-    return _transactionRepository.UpdateTransaction(transaction);
+    return await _transactionRepository.UpdateTransaction(transaction);
   }
 
-  public bool DeleteTransactionById(Guid transactionId)
+  public async Task<bool> DeleteTransactionById(Guid transactionId)
   {
-    return _transactionRepository.DeleteTransaction(transactionId);
+    return await _transactionRepository.DeleteTransaction(transactionId);
   }
 
-  public Transaction? GetTransactionById(Guid transactionId)
+  public async Task<Transaction?> GetTransactionById(Guid transactionId)
   {
-    return _transactionRepository.GetTransactionById(transactionId);
+    return await _transactionRepository.GetTransactionById(transactionId);
   }
 
-  public decimal GetTotalBalance()
+  public async Task<decimal> GetTotalBalance()
   {
-    return _transactionRepository.GetTotalBalance();
+    return await _transactionRepository.GetTotalBalance();
   }
 
-  public decimal GetTotalIncome()
+  public async Task<decimal> GetTotalIncome()
   {
-    var incomeTransactions = _transactionRepository.GetTransactionsByType(TransactionType.Income);
+    var incomeTransactions = await _transactionRepository.GetTransactionsByType(TransactionType.Income);
 
     return incomeTransactions.Sum(incomeTransaction => incomeTransaction.Amount);
   }
 
-  public decimal GetTotalExpense()
+  public async Task<decimal> GetTotalExpense()
   {
-    var expenseTransactions = _transactionRepository.GetTransactionsByType(TransactionType.Expense);
+    var expenseTransactions = await _transactionRepository.GetTransactionsByType(TransactionType.Expense);
 
     return expenseTransactions.Sum(expenseTransaction => expenseTransaction.Amount);
   }
@@ -82,34 +82,40 @@ public class TransactionService : ITransactionService
     return balance;
   }
 
-  public List<Transaction> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
+  public async Task<List<Transaction>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
-    return _transactionRepository.GetTransactionsByDateRange(startDate, endDate).OrderBy(t => t.Date).ToList();
+    var transactions = await _transactionRepository.GetTransactionsByDateRange(startDate, endDate);
+    return transactions.OrderBy(t => t.Date).ToList();
   }
 
-  public List<Transaction> GetTransactionsByDate(DateTime date)
+  public async Task<List<Transaction>> GetTransactionsByDate(DateTime date)
   {
-    return _transactionRepository.GetTransactionsByDate(date).OrderBy(t => t.Date).ToList();
+    var transactions = await _transactionRepository.GetTransactionsByDate(date);
+    return transactions.OrderBy(t => t.Date).ToList();
   }
 
-  public List<Transaction> GetTransactionsByCategory(Category category)
+  public async Task<List<Transaction>> GetTransactionsByCategory(Category category)
   {
-    return _transactionRepository.GetTransactionsByCategory(category).OrderBy(t => t.Date).ToList();
+    var transactions = await _transactionRepository.GetTransactionsByCategory(category);
+    return transactions.OrderBy(t => t.Date).ToList();
   }
 
-  public List<Transaction> GetTransactionsByCategoryId(int categoryId)
+  public async Task<List<Transaction>> GetTransactionsByCategoryId(int categoryId)
   {
-    return _transactionRepository.GetTransactionsByCategoryId(categoryId).OrderBy(t => t.Date).ToList();
+    var transactions = await _transactionRepository.GetTransactionsByCategoryId(categoryId);
+    return transactions.OrderBy(t => t.Date).ToList();
   }
 
-  public List<Transaction> GetTransactionsByType(TransactionType transactionType)
+  public async Task<List<Transaction>> GetTransactionsByType(TransactionType transactionType)
   {
-    return _transactionRepository.GetTransactionsByType(transactionType).OrderBy(t => t.Date).ToList();
+    var transactions = await _transactionRepository.GetTransactionsByType(transactionType);
+    return transactions.OrderBy(t => t.Date).ToList();
   }
 
-  public List<Transaction> GetAllTransactions()
+  public async Task<List<Transaction>> GetAllTransactions()
   {
-    return _transactionRepository.GetAllTransactions().OrderBy(t => t.Date).ToList();
+    var transactions = await _transactionRepository.GetAllTransactions();
+    return transactions.OrderBy(t => t.Date).ToList();
   }
 
   private void ValidateTransactionAmount(Transaction transaction)

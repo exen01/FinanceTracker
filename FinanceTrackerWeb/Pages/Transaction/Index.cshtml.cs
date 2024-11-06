@@ -34,9 +34,9 @@ public class IndexModel : PageModel
     _categoryService = categoryService;
   }
 
-  public IActionResult OnGet()
+  public async Task<PageResult> OnGetAsync()
   {
-    Categories = _categoryService.GetAllCategories();
+    Categories = await _categoryService.GetAllCategories();
 
     if (StartDate.HasValue && EndDate.HasValue && CategoryId.HasValue)
     {
@@ -47,7 +47,8 @@ public class IndexModel : PageModel
         return Page();
       }
 
-      Transactions = _transactionService.GetTransactionsByDateRange(StartDate.Value, EndDate.Value)
+      var transactions = await _transactionService.GetTransactionsByDateRange(StartDate.Value, EndDate.Value);
+      Transactions = transactions
         .Where(t => t.Category.Id == CategoryId)
         .ToList();
     }
@@ -60,19 +61,19 @@ public class IndexModel : PageModel
         return Page();
       }
 
-      Transactions = _transactionService.GetTransactionsByDateRange(StartDate.Value, EndDate.Value);
+      Transactions = await _transactionService.GetTransactionsByDateRange(StartDate.Value, EndDate.Value);
     }
     else if (StartDate.HasValue)
     {
-      Transactions = _transactionService.GetTransactionsByDate(StartDate.Value);
+      Transactions = await _transactionService.GetTransactionsByDate(StartDate.Value);
     }
     else if (CategoryId.HasValue)
     {
-      Transactions = _transactionService.GetTransactionsByCategoryId(CategoryId.Value);
+      Transactions = await _transactionService.GetTransactionsByCategoryId(CategoryId.Value);
     }
     else
     {
-      Transactions = _transactionService.GetAllTransactions();
+      Transactions = await _transactionService.GetAllTransactions();
     }
 
     Balance = _transactionService.GetBalanceForTransactions(Transactions);

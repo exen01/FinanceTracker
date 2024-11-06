@@ -15,14 +15,14 @@ namespace FinanceTrackerWeb.Pages.Category
 
     [BindProperty] public FinanceTracker.Domain.Entities.Category Category { get; set; } = default!;
 
-    public IActionResult OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync(int? id)
     {
       if (id == null)
       {
         return NotFound();
       }
 
-      var category = _service.GetCategoryById(id.Value);
+      var category = await _service.GetCategoryById(id.Value);
 
       if (category == null)
       {
@@ -34,18 +34,18 @@ namespace FinanceTrackerWeb.Pages.Category
       return Page();
     }
 
-    public IActionResult OnPostAsync(int? id)
+    public async Task<IActionResult> OnPostAsync(int? id)
     {
       if (id == null)
       {
         return NotFound();
       }
 
-      var category = _service.GetCategoryById(id.Value);
+      var category = await _service.GetCategoryById(id.Value);
       if (category == null) return RedirectToPage("./Index");
 
       Category = category;
-      _service.DeleteCategoryById(Category.Id);
+      await _service.DeleteCategoryById(Category.Id);
 
       return RedirectToPage("./Index");
     }

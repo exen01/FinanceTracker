@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using FinanceTracker.Domain.Abstractions;
 using FinanceTracker.Domain.Enums;
 using FinanceTrackerWeb.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinanceTrackerWeb.Pages
@@ -39,14 +38,14 @@ namespace FinanceTrackerWeb.Pages
       _logger = logger;
     }
 
-    public void OnGet()
+    public async Task OnGetAsync()
     {
-      TotalIncome = _transactionService.GetTotalIncome();
-      TotalExpense = _transactionService.GetTotalExpense();
-      TotalBalance = _transactionService.GetTotalBalance();
+      TotalIncome = await _transactionService.GetTotalIncome();
+      TotalExpense = await _transactionService.GetTotalExpense();
+      TotalBalance = await _transactionService.GetTotalBalance();
 
-      Transactions = _transactionService.GetAllTransactions();
-      Categories = _categoryService.GetCategoriesByType(TransactionType.Expense);
+      Transactions = await _transactionService.GetAllTransactions();
+      Categories = await _categoryService.GetCategoriesByType(TransactionType.Expense);
 
       CategoryExpenses = Categories.ToDictionary(
         category => category.CategoryName,

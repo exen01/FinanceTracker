@@ -1,10 +1,182 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Домашняя страница";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-4">
+        <div class="card border-dark bg-light mb-3">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                    <h1 class="display-1">
+                        <i class="bi bi-cash-stack text-success"></i>
+                    </h1>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayNameFor(model => model.TotalIncome)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => modelItem.TotalIncome)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card border-dark bg-light mb-3">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                    <h1 class="display-1">
+                        <i class="bi bi-cash-stack text-danger"></i>
+                    </h1>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayNameFor(model => model.TotalExpense)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => modelItem.TotalExpense)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card border-dark bg-light mb-3">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                    <h1 class="display-1">
+                        <i class="bi bi-cash-stack text-primary"></i>
+                    </h1>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayNameFor(model => model.TotalBalance)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => modelItem.TotalBalance)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<div class="row">
+    <div class="col-4">
+        <div class="card h-100 border-dark bg-light mb-3">
+            <canvas id="expenseChart"></canvas>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card h-100 border-dark bg-light mb-3">
+            <canvas id="trendChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById('expenseChart').getContext('2d');
+
+        var categoryLabels = @Html.Raw(Json.Serialize(Model.CategoryExpenses.Keys.ToArray()));
+        var categoryData = @Html.Raw(Json.Serialize(Model.CategoryExpenses.Values.ToArray()));
+
+        var expenseChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    label: 'Расходы по категориям',
+                    data: categoryData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Расходы по категориям'
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            return value;
+                        },
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById('trendChart').getContext('2d');
+
+        var expenseDates = @Html.Raw(Json.Serialize(Model.ExpensesByDate.Select(e => e.Date.ToString("yyyy-MM-dd")).ToArray()));
+        var expenseAmounts = @Html.Raw(Json.Serialize(Model.ExpensesByDate.Select(e => e.TotalAmount).ToArray()));
+
+        var trendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: expenseDates,
+                datasets: [{
+                    label: 'Тренд расходов',
+                    data: expenseAmounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Тренд расходов за период'
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day' // 'month', 'week'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Дата'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Сумма расходов'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>

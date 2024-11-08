@@ -118,6 +118,11 @@ public class TransactionService : ITransactionService
     return transactions.OrderBy(t => t.Date).ToList();
   }
 
+  public Task ImportTransactions(List<Transaction> transactions)
+  {
+    return _transactionRepository.ImportTransactions(transactions);
+  }
+
   private void ValidateTransactionAmount(Transaction transaction)
   {
     if (transaction.Amount < 0)
@@ -138,6 +143,7 @@ public class TransactionService : ITransactionService
   /// Конструктор.
   /// </summary>
   /// <param name="transactionRepository">Репозиторий транзакций</param>
+  /// <param name="categoryRepository">Репозиторий категорий</param>
   public TransactionService(ITransactionRepository transactionRepository)
   {
     _transactionRepository = transactionRepository;

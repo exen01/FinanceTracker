@@ -9,9 +9,10 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p>
+<div class="mb-3">
     <a asp-page="Create" class="btn btn-success">+ Новая транзакция</a>
-</p>
+    <a asp-page="Settings" class="btn btn-primary">Настройки транзакций</a>
+</div>
 
 <form method="get" class="row gy-2 gx-3 align-items-center mb-3">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -56,7 +57,7 @@
     @foreach (var transaction in Model.Transactions)
     {
         <tr>
-            <td>@transaction.Date.ToString(CultureInfo.InvariantCulture)</td>
+            <td>@transaction.Date.ToString("d MMMM yyyy HH:mm")</td>
             @if (transaction.TransactionType == TransactionType.Income)
             {
                 <td class="text-success">

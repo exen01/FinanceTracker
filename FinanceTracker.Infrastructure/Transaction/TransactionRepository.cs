@@ -107,6 +107,33 @@ public class TransactionRepository : ITransactionRepository
       .ToListAsync();
   }
 
+  public async Task ImportTransactions(List<Domain.Entities.Transaction> transactions)
+  {
+    var existingCategories = await _dbContext.Categories.AsNoTracking().ToListAsync();
+    var existingTransactions = await _dbContext.Transactions.AsNoTracking().ToListAsync();
+
+    foreach (var transaction in transactions)
+    {
+      var category = existingCategories.FirstOrDefault(c => c.CategoryName == transaction.Category.CategoryName);
+      if (category != null)
+      {
+        _dbContext.Attach(category);
+        transaction.Category = category;
+      }
+      else
+      {
+        await _dbContext.Categories.AddAsync(transaction.Category);
+      }
+
+      if (existingTransactions.All(t => t.Id != transaction.Id))
+      {
+        await _dbContext.Transactions.AddAsync(transaction);
+      }
+    }
+
+    await _dbContext.SaveChangesAsync();
+  }
+
   /// <summary>
   /// Конструктор.
   /// </summary>

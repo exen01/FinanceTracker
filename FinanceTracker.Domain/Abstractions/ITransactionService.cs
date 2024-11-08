@@ -101,6 +101,13 @@ public interface ITransactionService
   /// <summary>
   /// Получает список всех транзакций.
   /// </summary>
-  /// <returns></returns>
+  /// <returns>Список транзакций</returns>
   Task<List<Transaction>> GetAllTransactions();
+
+  /// <summary>
+  /// Импортирует список транзакций в систему.
+  /// </summary>
+  /// <param name="transactions">Список транзакций</param>
+  /// <returns></returns>
+  Task ImportTransactions(List<Transaction> transactions);
 }

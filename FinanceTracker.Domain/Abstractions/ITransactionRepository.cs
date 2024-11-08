@@ -83,4 +83,11 @@ public interface ITransactionRepository
   /// </summary>
   /// <returns></returns>
   Task<List<Transaction>> GetAllTransactions();
+
+  /// <summary>
+  /// Импортирует список транзакций в базу данных.
+  /// </summary>
+  /// <param name="transactions">Список транзакций</param>
+  /// <returns></returns>
+  Task ImportTransactions(List<Transaction> transactions);
 }

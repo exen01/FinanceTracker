@@ -1,0 +1,27 @@
+@page
+@model FinanceTrackerWeb.Pages.Transaction.Settings
+
+@{
+    ViewData["Title"] = "Настройки транзакций";
+}
+<div>
+    <a asp-page="Index">Список транзакций</a>
+</div>
+<h1>@ViewData["Title"]</h1>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<h2>Экспорт</h2>
+<form method="post" asp-page-handler="Export">
+    <button type="submit" class="btn btn-success">Экспортировать в JSON</button>
+</form>
+
+<hr/>
+
+<h2>Импорт</h2>
+<form method="post" asp-page-handler="Import" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="UploadFile" class="form-label"></label>
+        <input asp-for="UploadFile" class="form-control"/>
+        <span asp-validation-for="UploadFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Импортировать</button>
+</form>

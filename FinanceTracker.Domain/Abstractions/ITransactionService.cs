@@ -63,6 +63,20 @@ public interface ITransactionService
   decimal GetBalanceForTransactions(IList<Transaction> transactions);
 
   /// <summary>
+  /// Получает средний доход по транзакциям.
+  /// </summary>
+  /// <param name="transactions">Список транзакций</param>
+  /// <returns>Средний доход</returns>
+  decimal GetAverageIncomeForTransactions(IList<Transaction> transactions);
+
+  /// <summary>
+  /// Получает средний расход по транзакциям.
+  /// </summary>
+  /// <param name="transactions">Список транзакций</param>
+  /// <returns>Средний расход</returns>
+  decimal GetAverageExpenseForTransactions(IList<Transaction> transactions);
+
+  /// <summary>
   /// Получает список транзакций за период.
   /// </summary>
   /// <param name="startDate">Начало периода</param>

@@ -10,8 +10,17 @@ public class IndexModel : PageModel
   private readonly ITransactionService _transactionService;
   private readonly ICategoryService _categoryService;
 
+  public IndexModel(ITransactionService transactionService, ICategoryService categoryService)
+  {
+    _transactionService = transactionService;
+    _categoryService = categoryService;
+  }
+
   public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
   public List<FinanceTracker.Domain.Entities.Category> Categories { get; set; }
+
+  [Display(Name = "Баланс")]
+  [DataType(DataType.Currency)]
   public decimal Balance { get; set; }
 
   [BindProperty(SupportsGet = true)]
@@ -28,11 +37,13 @@ public class IndexModel : PageModel
   [DataType(DataType.Date)]
   public DateTime? EndDate { get; set; }
 
-  public IndexModel(ITransactionService transactionService, ICategoryService categoryService)
-  {
-    _transactionService = transactionService;
-    _categoryService = categoryService;
-  }
+  [Display(Name = "Средний доход")]
+  [DataType(DataType.Currency)]
+  public decimal AverageIncome { get; set; }
+
+  [Display(Name = "Средний расход")]
+  [DataType(DataType.Currency)]
+  public decimal AverageExpense { get; set; }
 
   public async Task<PageResult> OnGetAsync()
   {
@@ -77,6 +88,8 @@ public class IndexModel : PageModel
     }
 
     Balance = _transactionService.GetBalanceForTransactions(Transactions);
+    AverageIncome = _transactionService.GetAverageIncomeForTransactions(Transactions);
+    AverageExpense = _transactionService.GetAverageExpenseForTransactions(Transactions);
 
     return Page();
   }

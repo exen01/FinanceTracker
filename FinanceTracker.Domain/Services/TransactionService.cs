@@ -82,6 +82,36 @@ public class TransactionService : ITransactionService
     return balance;
   }
 
+  public decimal GetAverageIncomeForTransactions(IList<Transaction> transactions)
+  {
+    var incomeTransactions = transactions
+      .Where(transaction => transaction.TransactionType == TransactionType.Income)
+      .ToList();
+    var income = incomeTransactions.Sum(transaction => transaction.Amount);
+
+    if (incomeTransactions.Count == 0)
+    {
+      return decimal.Zero;
+    }
+
+    return income / incomeTransactions.Count;
+  }
+
+  public decimal GetAverageExpenseForTransactions(IList<Transaction> transactions)
+  {
+    var expenseTransactions = transactions
+      .Where(transaction => transaction.TransactionType == TransactionType.Expense)
+      .ToList();
+    var expense = expenseTransactions.Sum(transaction => transaction.Amount);
+
+    if (expenseTransactions.Count == 0)
+    {
+      return decimal.Zero;
+    }
+
+    return expense / expenseTransactions.Count;
+  }
+
   public async Task<List<Transaction>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
     var transactions = await _transactionRepository.GetTransactionsByDateRange(startDate, endDate);
@@ -143,7 +173,6 @@ public class TransactionService : ITransactionService
   /// Конструктор.
   /// </summary>
   /// <param name="transactionRepository">Репозиторий транзакций</param>
-  /// <param name="categoryRepository">Репозиторий категорий</param>
   public TransactionService(ITransactionRepository transactionRepository)
   {
     _transactionRepository = transactionRepository;

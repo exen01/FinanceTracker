@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using FinanceTracker.Domain.Abstractions;
 using FinanceTracker.Domain.Enums;
 using FinanceTrackerWeb.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FinanceTrackerWeb.Pages
@@ -12,24 +13,6 @@ namespace FinanceTrackerWeb.Pages
     private readonly ITransactionService _transactionService;
     private readonly ICategoryService _categoryService;
 
-    [DataType(DataType.Currency)]
-    [Display(Name = "Общий доход")]
-    public decimal TotalIncome { get; set; }
-
-    [DataType(DataType.Currency)]
-    [Display(Name = "Общий расход")]
-    public decimal TotalExpense { get; set; }
-
-    [DataType(DataType.Currency)]
-    [Display(Name = "Баланс")]
-    public decimal TotalBalance { get; set; }
-
-    public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
-    public List<FinanceTracker.Domain.Entities.Category> Categories { get; set; }
-    public Dictionary<string, decimal> CategoryExpenses { get; set; }
-    public List<ExpenseOverTime> ExpensesByDate { get; set; }
-    public List<ExpenseOverTime> IncomeByDate { get; set; }
-
     public IndexModel(ITransactionService transactionService, ICategoryService categoryService,
       ILogger<IndexModel> logger)
     {
@@ -38,20 +21,62 @@ namespace FinanceTrackerWeb.Pages
       _logger = logger;
     }
 
+    [DataType(DataType.Currency)]
+    [Display(Name = "Доход")]
+    public decimal TotalIncome { get; set; }
+
+    [DataType(DataType.Currency)]
+    [Display(Name = "Расход")]
+    public decimal TotalExpense { get; set; }
+
+    [DataType(DataType.Currency)]
+    [Display(Name = "Баланс")]
+    public decimal TotalBalance { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    [Display(Name = "Месяц")]
+    public DateTime SelectedMonth { get; set; }
+
+    public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
+    public List<FinanceTracker.Domain.Entities.Category> Categories { get; set; }
+    public Dictionary<string, decimal> CategoryExpenses { get; set; }
+    public List<ExpenseOverTime> ExpensesByDate { get; set; }
+    public List<ExpenseOverTime> IncomeByDate { get; set; }
+
     public async Task OnGetAsync()
     {
-      TotalIncome = await _transactionService.GetTotalIncome();
-      TotalExpense = await _transactionService.GetTotalExpense();
-      TotalBalance = await _transactionService.GetTotalBalance();
+      if (SelectedMonth == DateTime.MinValue)
+      {
+        SelectedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+      }
 
-      Transactions = await _transactionService.GetAllTransactions();
+      var startDate = new DateTime(SelectedMonth.Year, SelectedMonth.Month, 1);
+      var endDate = startDate.AddMonths(1).AddDays(-1);
+
+      Transactions = await _transactionService.GetTransactionsByDateRange(startDate, endDate);
+
+      TotalIncome = Transactions
+        .Where(t => t.TransactionType == TransactionType.Income)
+        .Sum(t => t.Amount);
+
+      TotalExpense = Transactions
+        .Where(t => t.TransactionType == TransactionType.Expense)
+        .Sum(t => t.Amount);
+
+      TotalBalance = TotalIncome - TotalExpense;
+
       Categories = await _categoryService.GetCategoriesByType(TransactionType.Expense);
 
-      CategoryExpenses = Categories.ToDictionary(
-        category => category.CategoryName,
-        category => Transactions
-          .Where(t => t.Category.Id == category.Id)
-          .Sum(t => t.Amount));
+      var categoryExpenses = new Dictionary<string, decimal>();
+      foreach (var transaction in Transactions.Where(t => t.TransactionType == TransactionType.Expense))
+      {
+        if (!categoryExpenses.TryAdd(transaction.Category.CategoryName, transaction.Amount))
+        {
+          categoryExpenses[transaction.Category.CategoryName] += transaction.Amount;
+        }
+      }
+
+      CategoryExpenses = categoryExpenses;
 
       ExpensesByDate = Transactions
         .Where(t => t.TransactionType == TransactionType.Expense)

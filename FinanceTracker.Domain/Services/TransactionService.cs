@@ -115,37 +115,37 @@ public class TransactionService : ITransactionService
   public async Task<List<Transaction>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
     var transactions = await _transactionRepository.GetTransactionsByDateRange(startDate, endDate);
-    return transactions.OrderBy(t => t.Date).ToList();
+    return transactions.OrderByDescending(t => t.Date).ToList();
   }
 
   public async Task<List<Transaction>> GetTransactionsByDate(DateTime date)
   {
     var transactions = await _transactionRepository.GetTransactionsByDate(date);
-    return transactions.OrderBy(t => t.Date).ToList();
+    return transactions.OrderByDescending(t => t.Date).ToList();
   }
 
   public async Task<List<Transaction>> GetTransactionsByCategory(Category category)
   {
     var transactions = await _transactionRepository.GetTransactionsByCategory(category);
-    return transactions.OrderBy(t => t.Date).ToList();
+    return transactions.OrderByDescending(t => t.Date).ToList();
   }
 
   public async Task<List<Transaction>> GetTransactionsByCategoryId(int categoryId)
   {
     var transactions = await _transactionRepository.GetTransactionsByCategoryId(categoryId);
-    return transactions.OrderBy(t => t.Date).ToList();
+    return transactions.OrderByDescending(t => t.Date).ToList();
   }
 
   public async Task<List<Transaction>> GetTransactionsByType(TransactionType transactionType)
   {
     var transactions = await _transactionRepository.GetTransactionsByType(transactionType);
-    return transactions.OrderBy(t => t.Date).ToList();
+    return transactions.OrderByDescending(t => t.Date).ToList();
   }
 
   public async Task<List<Transaction>> GetAllTransactions()
   {
     var transactions = await _transactionRepository.GetAllTransactions();
-    return transactions.OrderBy(t => t.Date).ToList();
+    return transactions.OrderByDescending(t => t.Date).ToList();
   }
 
   public Task ImportTransactions(List<Transaction> transactions)

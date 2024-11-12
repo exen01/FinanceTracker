@@ -3,6 +3,29 @@
 @{
     ViewData["Title"] = "Домашняя страница";
 }
+<form method="get">
+    <div class="row mb-3 align-items-end">
+        <div class="col-auto">
+            <div class="input-group">
+                <label asp-for="SelectedMonth" class="input-group-text"></label>
+                <input asp-for="SelectedMonth" type="month" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Показать</button>
+        </div>
+        <div class="col-auto">
+            <a asp-page="./Index" asp-route-SelectedMonth="@(Model.SelectedMonth.AddMonths(-1).ToString("yyyy-MM"))"
+               class="btn btn-outline-secondary" title="Предыдущий месяц">
+                <i class="bi bi-chevron-double-left"></i>
+            </a>
+            <a asp-page="./Index" asp-route-SelectedMonth="@(Model.SelectedMonth.AddMonths(1).ToString("yyyy-MM"))"
+               class="btn btn-outline-secondary" title="Следующий месяц">
+                <i class="bi bi-chevron-double-right"></i>
+            </a>
+        </div>
+    </div>
+</form>
 
 <div class="row">
     <div class="col-4">

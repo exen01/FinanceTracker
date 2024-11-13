@@ -1,4 +1,5 @@
 using FinanceTracker.Domain.Abstractions;
+using FinanceTracker.Domain.Logger;
 using FinanceTracker.Domain.Services;
 using FinanceTracker.Infrastructure.Category;
 using FinanceTracker.Infrastructure.Configuration;
@@ -17,6 +18,8 @@ namespace FinanceTrackerWeb
       builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
       builder.Services.AddScoped<ITransactionService, TransactionService>();
       builder.Services.AddScoped<ICategoryService, CategoryService>();
+      builder.Services.AddSingleton<Logger>(provider =>
+        new Logger(Path.Combine(Directory.GetCurrentDirectory(), "Logs", "Transactions.log")));
 
       // Add services to the container.
       builder.Services.AddRazorPages();

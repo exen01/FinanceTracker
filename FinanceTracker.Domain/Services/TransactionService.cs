@@ -7,6 +7,7 @@ namespace FinanceTracker.Domain.Services;
 public class TransactionService : ITransactionService
 {
   private readonly ITransactionRepository _transactionRepository;
+  private readonly Logger.Logger _logger;
 
   public async Task<Transaction> AddTransaction(Transaction transaction)
   {
@@ -18,11 +19,16 @@ public class TransactionService : ITransactionService
       var currentBalance = await GetTotalBalance();
       if (currentBalance - transaction.Amount < 0)
       {
+        await _logger.LogAsync("Ошибка при добавлении транзакции: Недостаточный баланс для транзакции.");
         throw new InvalidOperationException("Недостаточный баланс для транзакции.");
       }
     }
 
-    return await _transactionRepository.AddTransaction(transaction);
+    var added = await _transactionRepository.AddTransaction(transaction);
+
+    await _logger.LogAsync($"Добавлена транзакция {added.Id}: {added.Description}, " +
+                           $"Сумма: {added.Amount}");
+    return added;
   }
 
   public async Task<Transaction> UpdateTransaction(Transaction transaction)
@@ -30,12 +36,22 @@ public class TransactionService : ITransactionService
     ValidateTransactionAmount(transaction);
     ValidateTransactionCategory(transaction);
 
-    return await _transactionRepository.UpdateTransaction(transaction);
+    var updated = await _transactionRepository.UpdateTransaction(transaction);
+
+    await _logger.LogAsync($"Обновлена транзакция {updated.Id}: {updated.Description}, " +
+                           $"Сумма: {updated.Amount}");
+
+    return updated;
   }
 
   public async Task<bool> DeleteTransactionById(Guid transactionId)
   {
-    return await _transactionRepository.DeleteTransaction(transactionId);
+    var isDeleted = await _transactionRepository.DeleteTransaction(transactionId);
+
+    if (isDeleted)
+      await _logger.LogAsync($"Удалена транзакция {transactionId}");
+
+    return isDeleted;
   }
 
   public async Task<Transaction?> GetTransactionById(Guid transactionId)
@@ -173,8 +189,10 @@ public class TransactionService : ITransactionService
   /// Конструктор.
   /// </summary>
   /// <param name="transactionRepository">Репозиторий транзакций</param>
-  public TransactionService(ITransactionRepository transactionRepository)
+  /// <param name="logger">Логер</param>
+  public TransactionService(ITransactionRepository transactionRepository, Logger.Logger logger)
   {
     _transactionRepository = transactionRepository;
+    _logger = logger;
   }
 }

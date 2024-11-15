@@ -43,11 +43,10 @@ public class TransactionRepository : ITransactionRepository
 
   public async Task<Domain.Entities.Transaction?> GetTransactionById(Guid transactionId)
   {
-    var transaction = await _transactionsDbSet.FindAsync(transactionId);
-    if (transaction != null && (transaction.IsDeleted || transaction.Category.IsDeleted))
-    {
-      return null;
-    }
+    var transaction = await _transactionsDbSet
+      .Include(t => t.Category)
+      .Where(t => !t.IsDeleted)
+      .FirstOrDefaultAsync(t => t.Id == transactionId);
 
     return transaction;
   }

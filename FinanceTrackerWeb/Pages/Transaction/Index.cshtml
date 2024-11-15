@@ -1,5 +1,4 @@
 @page
-@using System.Globalization
 @using FinanceTracker.Domain.Enums
 @model FinanceTrackerWeb.Pages.Transaction.IndexModel
 
@@ -21,7 +20,8 @@
     <div class="col-auto">
         <div class="input-group">
             <label asp-for="CategoryId" class="input-group-text"></label>
-            <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "CategoryName"))" class="form-select">
+            <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "CategoryName"))"
+                    class="form-select">
                 <option value="" selected>Все</option>
             </select>
         </div>
@@ -57,6 +57,7 @@
         <th scope="col">Сумма</th>
         <th scope="col">Категория</th>
         <th scope="col">Описание</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -78,6 +79,16 @@
             }
             <td>@transaction.Category.CategoryName</td>
             <td>@transaction.Description</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a asp-page="./Edit" asp-route-id="@transaction.Id" class="btn btn-success">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                    <a asp-page="./Delete" asp-route-id="@transaction.Id" class="btn btn-danger">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                </div>
+            </td>
         </tr>
     }
     </tbody>

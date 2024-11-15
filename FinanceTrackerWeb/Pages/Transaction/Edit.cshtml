@@ -1,8 +1,9 @@
 @page
-@model CreateModel
+@using FinanceTrackerWeb.Models.Dto
+@model EditModel
 
 @{
-    ViewData["Title"] = "Создание новой транзакции";
+    ViewData["Title"] = "Редактирование транзакции";
 }
 
 <div>
@@ -37,7 +38,8 @@
             </div>
             <div class="mb-3">
                 <label asp-for="TransactionDto.Date" class="form-label"></label>
-                <input asp-for="TransactionDto.Date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"/>
+                <input asp-for="TransactionDto.Date" class="form-control"
+                       value="@Model.TransactionDto.Date.ToString("yyyy-MM-ddTHH:mm")"/>
                 <span asp-validation-for="TransactionDto.Date" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-success">Создать</button>

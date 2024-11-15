@@ -22,15 +22,15 @@ namespace FinanceTrackerWeb.Pages
     }
 
     [DataType(DataType.Currency)]
-    [Display(Name = "Доход")]
+    [Display(Name = "Доход за месяц")]
     public decimal TotalIncome { get; set; }
 
     [DataType(DataType.Currency)]
-    [Display(Name = "Расход")]
+    [Display(Name = "Расход за месяц")]
     public decimal TotalExpense { get; set; }
 
     [DataType(DataType.Currency)]
-    [Display(Name = "Баланс")]
+    [Display(Name = "Текущий баланс")]
     public decimal TotalBalance { get; set; }
 
     [BindProperty(SupportsGet = true)]
@@ -63,7 +63,7 @@ namespace FinanceTrackerWeb.Pages
         .Where(t => t.TransactionType == TransactionType.Expense)
         .Sum(t => t.Amount);
 
-      TotalBalance = TotalIncome - TotalExpense;
+      TotalBalance = await _transactionService.GetTotalBalance();
 
       Categories = await _categoryService.GetCategoriesByType(TransactionType.Expense);
 

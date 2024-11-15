@@ -19,8 +19,9 @@ public class TransactionService : ITransactionService
       var currentBalance = await GetTotalBalance();
       if (currentBalance - transaction.Amount < 0)
       {
-        await _logger.LogAsync("Ошибка при добавлении транзакции: Недостаточный баланс для транзакции.");
-        throw new InvalidOperationException("Недостаточный баланс для транзакции.");
+        const string message = "Недостаточный баланс для транзакции.";
+        await _logger.LogAsync($"Ошибка при добавлении транзакции: {message}");
+        throw new InvalidOperationException(message);
       }
     }
 
@@ -35,6 +36,17 @@ public class TransactionService : ITransactionService
   {
     ValidateTransactionAmount(transaction);
     ValidateTransactionCategory(transaction);
+
+    if (transaction.TransactionType == TransactionType.Expense)
+    {
+      var currentBalance = await GetTotalBalance();
+      if (currentBalance - transaction.Amount < 0)
+      {
+        const string message = "Недостаточный баланс для транзакции.";
+        await _logger.LogAsync($"Ошибка при обновлении транзакции: {message}");
+        throw new InvalidOperationException(message);
+      }
+    }
 
     var updated = await _transactionRepository.UpdateTransaction(transaction);
 

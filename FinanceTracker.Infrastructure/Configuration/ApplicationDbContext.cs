@@ -39,6 +39,8 @@ public class ApplicationDbContext : DbContext
       entity.Property(e => e.Amount)
         .IsRequired();
 
+      entity.Property(e => e.IsDeleted);
+
       entity.HasOne(e => e.Category)
         .WithMany()
         .HasForeignKey("CategoryId")
@@ -55,6 +57,8 @@ public class ApplicationDbContext : DbContext
 
       entity.Property(e => e.TransactionType)
         .IsRequired();
+
+      entity.Property(e => e.IsDeleted);
     });
   }
 

@@ -38,6 +38,11 @@ public class CategoryService : ICategoryService
     return await _categoryRepository.GetCategoriesByType(type);
   }
 
+  public Task SoftDeleteCategoryById(int id)
+  {
+    return _categoryRepository.SoftDeleteCategoryById(id);
+  }
+
   /// <summary>
   /// Конструктор.
   /// </summary>

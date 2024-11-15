@@ -90,4 +90,10 @@ public interface ITransactionRepository
   /// <param name="transactions">Список транзакций</param>
   /// <returns></returns>
   Task ImportTransactions(List<Transaction> transactions);
+
+  /// <summary>
+  /// Помечает транзакцию на удаление.
+  /// </summary>
+  /// <param name="transactionId">Идентификатор транзакции</param>
+  Task SoftDeleteTransactionById(Guid transactionId);
 }

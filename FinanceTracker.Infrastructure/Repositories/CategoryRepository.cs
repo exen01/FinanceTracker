@@ -3,7 +3,7 @@ using FinanceTracker.Domain.Enums;
 using FinanceTracker.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanceTracker.Infrastructure.Category;
+namespace FinanceTracker.Infrastructure.Repositories;
 
 public class CategoryRepository : ICategoryRepository
 {
@@ -41,17 +41,36 @@ public class CategoryRepository : ICategoryRepository
 
   public async Task<List<Domain.Entities.Category>> GetAllCategories()
   {
-    return await _categoriesDbSet.ToListAsync();
+    return await _categoriesDbSet.Where(c => !c.IsDeleted).ToListAsync();
   }
 
   public async Task<Domain.Entities.Category?> GetCategoryById(int categoryId)
   {
-    return await _categoriesDbSet.FindAsync(categoryId);
+    var category = await _categoriesDbSet.FindAsync(categoryId);
+    if (category != null && category.IsDeleted)
+    {
+      return null;
+    }
+
+    return category;
   }
 
   public async Task<List<Domain.Entities.Category>> GetCategoriesByType(TransactionType type)
   {
-    return await _categoriesDbSet.Where(c => c.TransactionType == type).ToListAsync();
+    return await _categoriesDbSet
+      .Where(c => !c.IsDeleted)
+      .Where(c => c.TransactionType == type)
+      .ToListAsync();
+  }
+
+  public async Task SoftDeleteCategoryById(int categoryId)
+  {
+    var category = await _categoriesDbSet.FindAsync(categoryId);
+    if (category != null)
+    {
+      category.IsDeleted = true;
+      await _dbContext.SaveChangesAsync();
+    }
   }
 
   /// <summary>

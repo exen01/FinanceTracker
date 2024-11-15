@@ -48,4 +48,10 @@ public interface ICategoryRepository
   /// <param name="type"></param>
   /// <returns></returns>
   Task<List<Category>> GetCategoriesByType(TransactionType type);
+  
+  /// <summary>
+  /// Помечает категорию на удаление.
+  /// </summary>
+  /// <param name="categoryId">Идентификатор категории</param>
+  Task SoftDeleteCategoryById(int categoryId);
 }

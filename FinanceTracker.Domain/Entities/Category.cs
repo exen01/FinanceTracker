@@ -11,14 +11,19 @@ public class Category
   /// Идентификатор категории.
   /// </summary>
   public int Id { get; set; }
-  
+
   /// <summary>
   /// Название категории.
   /// </summary>
   public string CategoryName { get; set; }
-  
+
   /// <summary>
   /// Тип категории.
   /// </summary>
   public TransactionType TransactionType { get; set; }
+
+  /// <summary>
+  /// Отметка удаления.
+  /// </summary>
+  public bool IsDeleted { get; set; }
 }

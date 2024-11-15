@@ -32,7 +32,7 @@ public class CreateModel : PageModel
       }).ToList();
   }
 
-  public async Task<IActionResult> OnPost()
+  public async Task<IActionResult> OnPostAsync()
   {
     if (!ModelState.IsValid)
     {
@@ -56,7 +56,7 @@ public class CreateModel : PageModel
 
     try
     {
-      _transactionService.AddTransaction(newTransaction);
+      await _transactionService.AddTransaction(newTransaction);
     }
     catch (InvalidOperationException e)
     {

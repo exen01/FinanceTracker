@@ -45,4 +45,10 @@ public interface ICategoryService
   /// <param name="type">Тип категории</param>
   /// <returns>Список категорий</returns>
   Task<List<Category>> GetCategoriesByType(TransactionType type);
+
+  /// <summary>
+  /// Помечает категорию на удаление.
+  /// </summary>
+  /// <param name="id">Идентификатор категории</param>
+  Task SoftDeleteCategoryById(int id);
 }

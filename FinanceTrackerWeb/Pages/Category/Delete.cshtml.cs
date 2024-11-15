@@ -45,7 +45,7 @@ namespace FinanceTrackerWeb.Pages.Category
       if (category == null) return RedirectToPage("./Index");
 
       Category = category;
-      await _service.DeleteCategoryById(Category.Id);
+      await _service.SoftDeleteCategoryById(Category.Id);
 
       return RedirectToPage("./Index");
     }

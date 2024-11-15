@@ -1,9 +1,8 @@
 using FinanceTracker.Domain.Abstractions;
 using FinanceTracker.Domain.Logger;
 using FinanceTracker.Domain.Services;
-using FinanceTracker.Infrastructure.Category;
 using FinanceTracker.Infrastructure.Configuration;
-using FinanceTracker.Infrastructure.Transaction;
+using FinanceTracker.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceTrackerWeb

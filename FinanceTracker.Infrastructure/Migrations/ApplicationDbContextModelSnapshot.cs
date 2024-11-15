@@ -28,6 +28,9 @@ namespace FinanceTracker.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TransactionType")
                         .HasColumnType("INTEGER");
 
@@ -55,6 +58,9 @@ namespace FinanceTracker.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("INTEGER");

@@ -169,6 +169,11 @@ public class TransactionService : ITransactionService
     return _transactionRepository.ImportTransactions(transactions);
   }
 
+  public Task SoftDeleteTransactionById(Guid transactionId)
+  {
+    return _transactionRepository.SoftDeleteTransactionById(transactionId);
+  }
+
   private void ValidateTransactionAmount(Transaction transaction)
   {
     if (transaction.Amount < 0)

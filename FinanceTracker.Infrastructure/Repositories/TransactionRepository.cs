@@ -3,7 +3,7 @@ using FinanceTracker.Domain.Enums;
 using FinanceTracker.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanceTracker.Infrastructure.Transaction;
+namespace FinanceTracker.Infrastructure.Repositories;
 
 public class TransactionRepository : ITransactionRepository
 {
@@ -43,13 +43,23 @@ public class TransactionRepository : ITransactionRepository
 
   public async Task<Domain.Entities.Transaction?> GetTransactionById(Guid transactionId)
   {
-    return await _transactionsDbSet.FindAsync(transactionId);
+    var transaction = await _transactionsDbSet.FindAsync(transactionId);
+    if (transaction != null && (transaction.IsDeleted || transaction.Category.IsDeleted))
+    {
+      return null;
+    }
+
+    return transaction;
   }
 
   public async Task<decimal> GetTotalBalance()
   {
-    decimal totalBalance = 0;
-    foreach (var transaction in await _transactionsDbSet.ToListAsync())
+    var totalBalance = decimal.Zero;
+    var transactions = await _transactionsDbSet
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
+      .ToListAsync();
+
+    foreach (var transaction in transactions)
     {
       switch (transaction.TransactionType)
       {
@@ -68,6 +78,8 @@ public class TransactionRepository : ITransactionRepository
   public async Task<List<Domain.Entities.Transaction>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
   {
     return await _transactionsDbSet
+      .Include(t => t.Category)
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
       .Where(t => t.Date.Date >= startDate.Date && t.Date.Date <= endDate.Date)
       .ToListAsync();
   }
@@ -75,6 +87,8 @@ public class TransactionRepository : ITransactionRepository
   public async Task<List<Domain.Entities.Transaction>> GetTransactionsByDate(DateTime date)
   {
     return await _transactionsDbSet
+      .Include(t => t.Category)
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
       .Where(t => t.Date.Date == date.Date)
       .ToListAsync();
   }
@@ -82,6 +96,8 @@ public class TransactionRepository : ITransactionRepository
   public async Task<List<Domain.Entities.Transaction>> GetTransactionsByCategory(Domain.Entities.Category category)
   {
     return await _transactionsDbSet
+      .Include(t => t.Category)
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
       .Where(t => t.Category == category)
       .ToListAsync();
   }
@@ -89,6 +105,8 @@ public class TransactionRepository : ITransactionRepository
   public async Task<List<Domain.Entities.Transaction>> GetTransactionsByCategoryId(int categoryId)
   {
     return await _transactionsDbSet
+      .Include(t => t.Category)
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
       .Where(t => t.Category.Id == categoryId)
       .ToListAsync();
   }
@@ -96,6 +114,8 @@ public class TransactionRepository : ITransactionRepository
   public async Task<List<Domain.Entities.Transaction>> GetTransactionsByType(TransactionType transactionType)
   {
     return await _transactionsDbSet
+      .Include(t => t.Category)
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
       .Where(t => t.TransactionType == transactionType)
       .ToListAsync();
   }
@@ -104,17 +124,27 @@ public class TransactionRepository : ITransactionRepository
   {
     return await _transactionsDbSet
       .Include(t => t.Category)
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
       .ToListAsync();
   }
 
   public async Task ImportTransactions(List<Domain.Entities.Transaction> transactions)
   {
-    var existingCategories = await _dbContext.Categories.AsNoTracking().ToListAsync();
-    var existingTransactions = await _dbContext.Transactions.AsNoTracking().ToListAsync();
+    var existingCategories = await _dbContext.Categories
+      .Where(c => !c.IsDeleted)
+      .AsNoTracking()
+      .ToListAsync();
+
+    var existingTransactions = await _dbContext.Transactions
+      .Where(t => !t.IsDeleted && !t.Category.IsDeleted)
+      .AsNoTracking()
+      .ToListAsync();
 
     foreach (var transaction in transactions)
     {
-      var category = existingCategories.FirstOrDefault(c => c.CategoryName == transaction.Category.CategoryName);
+      var category = existingCategories
+        .FirstOrDefault(c => c.CategoryName == transaction.Category.CategoryName);
+
       if (category != null)
       {
         _dbContext.Attach(category);
@@ -132,6 +162,16 @@ public class TransactionRepository : ITransactionRepository
     }
 
     await _dbContext.SaveChangesAsync();
+  }
+
+  public async Task SoftDeleteTransactionById(Guid transactionId)
+  {
+    var transaction = await _transactionsDbSet.FindAsync(transactionId);
+    if (transaction != null)
+    {
+      transaction.IsDeleted = true;
+      await _dbContext.SaveChangesAsync();
+    }
   }
 
   /// <summary>

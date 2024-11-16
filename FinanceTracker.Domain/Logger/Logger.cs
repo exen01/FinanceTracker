@@ -5,21 +5,16 @@ namespace FinanceTracker.Domain.Logger;
 /// </summary>
 public class Logger
 {
+  #region Поля и свойства
+
   /// <summary>
   /// Путь до файла с логами.
   /// </summary>
   private readonly string _logFilePath;
 
-  /// <summary>
-  /// Конструктор.
-  /// </summary>
-  /// <param name="logFilePath">Путь до файла с логами</param>
-  public Logger(string logFilePath)
-  {
-    _logFilePath = logFilePath;
+  #endregion
 
-    CreateLogFile();
-  }
+  #region Методы
 
   /// <summary>
   /// Создает директорию и файл для логов.
@@ -58,4 +53,21 @@ public class Logger
 
     await File.AppendAllTextAsync(_logFilePath, logEntry);
   }
+
+  #endregion
+
+  #region Конструкторы
+
+  /// <summary>
+  /// Конструктор.
+  /// </summary>
+  /// <param name="logFilePath">Путь до файла с логами</param>
+  public Logger(string logFilePath)
+  {
+    _logFilePath = logFilePath;
+
+    CreateLogFile();
+  }
+
+  #endregion
 }

@@ -6,7 +6,13 @@ namespace FinanceTracker.Domain.Services;
 
 public class CategoryService : ICategoryService
 {
+  #region Поля и свойства
+
   private readonly ICategoryRepository _categoryRepository;
+
+  #endregion
+
+  #region Методы
 
   public async Task<Category?> GetCategoryById(int id)
   {
@@ -43,6 +49,10 @@ public class CategoryService : ICategoryService
     return _categoryRepository.SoftDeleteCategoryById(id);
   }
 
+  #endregion
+
+  #region Конструкторы
+
   /// <summary>
   /// Конструктор.
   /// </summary>
@@ -51,4 +61,6 @@ public class CategoryService : ICategoryService
   {
     _categoryRepository = categoryRepository;
   }
+
+  #endregion
 }

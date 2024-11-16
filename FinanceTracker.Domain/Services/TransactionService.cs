@@ -6,8 +6,14 @@ namespace FinanceTracker.Domain.Services;
 
 public class TransactionService : ITransactionService
 {
+  #region Поля и свойства
+
   private readonly ITransactionRepository _transactionRepository;
   private readonly Logger.Logger _logger;
+
+  #endregion
+
+  #region Методы
 
   public async Task<Transaction> AddTransaction(Transaction transaction)
   {
@@ -202,6 +208,10 @@ public class TransactionService : ITransactionService
     }
   }
 
+  #endregion
+
+  #region Конструкторы
+
   /// <summary>
   /// Конструктор.
   /// </summary>
@@ -212,4 +222,6 @@ public class TransactionService : ITransactionService
     _transactionRepository = transactionRepository;
     _logger = logger;
   }
+
+  #endregion
 }

@@ -5,10 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinanceTracker.Infrastructure.Repositories;
 
+/// <summary>
+/// Реализация основных действий с категориями.
+/// </summary>
 public class CategoryRepository : ICategoryRepository
 {
+  #region Поля и свойства
+
   private readonly ApplicationDbContext _dbContext;
   private readonly DbSet<Domain.Entities.Category> _categoriesDbSet;
+
+  #endregion
+
+  #region Методы
 
   public async Task<Domain.Entities.Category> AddCategory(Domain.Entities.Category category)
   {
@@ -73,6 +82,10 @@ public class CategoryRepository : ICategoryRepository
     }
   }
 
+  #endregion
+
+  #region Конструкторы
+
   /// <summary>
   /// Конструктор.
   /// </summary>
@@ -82,4 +95,6 @@ public class CategoryRepository : ICategoryRepository
     _dbContext = dbContext;
     _categoriesDbSet = _dbContext.Set<Domain.Entities.Category>();
   }
+
+  #endregion
 }

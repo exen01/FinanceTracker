@@ -5,10 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinanceTracker.Infrastructure.Repositories;
 
+/// <summary>
+/// Реализация основных действий с транзакциями.
+/// </summary>
 public class TransactionRepository : ITransactionRepository
 {
+  #region Поля и свойства
+
   private readonly ApplicationDbContext _dbContext;
   private readonly DbSet<Domain.Entities.Transaction> _transactionsDbSet;
+
+  #endregion
+
+  #region Методы
 
   public async Task<Domain.Entities.Transaction> AddTransaction(Domain.Entities.Transaction transaction)
   {
@@ -173,6 +182,10 @@ public class TransactionRepository : ITransactionRepository
     }
   }
 
+  #endregion
+
+  #region Конструкторы
+
   /// <summary>
   /// Конструктор.
   /// </summary>
@@ -182,4 +195,6 @@ public class TransactionRepository : ITransactionRepository
     _dbContext = dbContext;
     _transactionsDbSet = _dbContext.Set<Domain.Entities.Transaction>();
   }
+
+  #endregion
 }

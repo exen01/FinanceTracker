@@ -18,11 +18,7 @@ public class IndexModel : PageModel
 
   public List<FinanceTracker.Domain.Entities.Transaction> Transactions { get; set; }
   public List<FinanceTracker.Domain.Entities.Category> Categories { get; set; }
-
-  [Display(Name = "Баланс")]
-  [DataType(DataType.Currency)]
-  public decimal Balance { get; set; }
-
+  
   [BindProperty(SupportsGet = true)]
   [Display(Name = "Категория")]
   public int? CategoryId { get; set; }
@@ -86,8 +82,7 @@ public class IndexModel : PageModel
     {
       Transactions = await _transactionService.GetAllTransactions();
     }
-
-    Balance = _transactionService.GetBalanceForTransactions(Transactions);
+    
     AverageIncome = _transactionService.GetAverageIncomeForTransactions(Transactions);
     AverageExpense = _transactionService.GetAverageExpenseForTransactions(Transactions);
 

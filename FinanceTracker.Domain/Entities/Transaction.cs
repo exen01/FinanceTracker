@@ -7,6 +7,8 @@ namespace FinanceTracker.Domain.Entities;
 /// </summary>
 public class Transaction
 {
+  #region Поля и свойства
+
   /// <summary>
   /// Идентификатор транзакции.
   /// </summary>
@@ -41,4 +43,6 @@ public class Transaction
   /// Отметка удаления.
   /// </summary>
   public bool IsDeleted { get; set; }
+
+  #endregion
 }

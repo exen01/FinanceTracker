@@ -7,6 +7,8 @@ namespace FinanceTracker.Domain.Entities;
 /// </summary>
 public class Category
 {
+  #region Поля и свойства
+
   /// <summary>
   /// Идентификатор категории.
   /// </summary>
@@ -26,4 +28,6 @@ public class Category
   /// Отметка удаления.
   /// </summary>
   public bool IsDeleted { get; set; }
+
+  #endregion
 }
